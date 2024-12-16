@@ -19,16 +19,14 @@ router.post("/register", async (req, res) => {
     const hPassword = await bcrypt.hash(password, 10);
 
     const [result] = await db.query(
-      "INSERT INTO users (username, password) VALUES (?, ?)",
+      "INSERT INTO usuarios (username, password) VALUES (?, ?)",
       [username, hPassword]
     );
 
-    res
-      .status(201)
-      .json({
-        message: "Usuario registrado con éxito",
-        userId: result.insertId,
-      });
+    res.status(201).json({
+      message: "Usuario registrado con éxito",
+      userId: result.insertId,
+    });
   } catch (error) {
     if (error.code === "ER_DUP_ENTRY") {
       res.status(400).json({ message: "El usuario ya existe" });
@@ -49,7 +47,7 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const [rows] = await db.query("SELECT * FROM users WHERE username = ?", [
+    const [rows] = await db.query("SELECT * FROM usuarios WHERE username = ?", [
       username,
     ]);
 
